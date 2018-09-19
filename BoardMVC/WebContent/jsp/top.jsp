@@ -12,9 +12,9 @@
     <li class="dropdown">
       <a href="#" class="dropbtn">게시판</a>
       <div class="dropdown-content">
-        <a href="boardList?btype=0">공지</a>
-        <a href="boardList?btype=1">자유</a>
-        <a href="boardList?btype=2">유머</a>        
+        <a href="boardList.bo?btype=0">공지</a>
+        <a href="boardList.bo?btype=1">자유</a>
+        <a href="boardList.bo?btype=2">유머</a>        
       </div>
     </li>
   </ul>
