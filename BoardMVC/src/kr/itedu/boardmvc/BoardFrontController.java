@@ -10,7 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.itedu.boardmvc.action.Action;
+import kr.itedu.boardmvc.action.BoardCommentDelAction;
+import kr.itedu.boardmvc.action.BoardCommentRegAction;
+import kr.itedu.boardmvc.action.BoardDeleteAction;
+import kr.itedu.boardmvc.action.BoardDetailAction;
 import kr.itedu.boardmvc.action.BoardListAction;
+import kr.itedu.boardmvc.action.BoardRegModFormAction;
+import kr.itedu.boardmvc.action.BoardRegModProcAction;
+import kr.itedu.boardmvc.common.Utils;
+import kr.itedu.boardmvc.common.Var;
 
 @WebServlet("*.bo")
 public class BoardFrontController extends HttpServlet {	
@@ -22,23 +30,40 @@ public class BoardFrontController extends HttpServlet {
 		String ctxPath = request.getContextPath();		
 		String comd = reqURI.substring(ctxPath.length());
 		
+		System.out.println("comd : " + comd);
+		
 		System.out.println("reqURI : " + reqURI);
 		System.out.println("ctxPath : " + ctxPath);
 		System.out.println("comd : " + comd);
 		ActionForward forward = null;
-		Action action = null;
 		
-		if(comd.equals("/boardList.bo")) {
-			action = new BoardListAction();
-			try {
-				forward = action.execute(request, response);
-			} catch(Exception e) {
-				//TODO: 예외처리
-				e.printStackTrace();
-			}
-		} else if(comd.equals("/boardDetail.bo")) {
+		try {
+			int btype = Utils.getParamInt(request.getParameter("btype"));
+			request.setAttribute("title", Var.TITLES[btype]);
 			
-		}
+			Action action = null;
+			if(comd.equals("/boardList.bo")) {
+				action = new BoardListAction();
+			} else if(comd.equals("/boardDetail.bo")) {
+				action = new BoardDetailAction();				
+			} else if(comd.equals("/boardRegModForm.bo")) {
+				action = new BoardRegModFormAction();
+			} else if(comd.equals("/boardRegModProc.bo")) {
+				action = new BoardRegModProcAction();
+			} else if(comd.equals("/boardDelete.bo")) {
+				action = new BoardDeleteAction();
+			} else if(comd.equals("/boardCommentReg.bo")) {
+				action = new BoardCommentRegAction();
+			} else if(comd.equals("/boardCommentDelete.bo")) {
+				action = new BoardCommentDelAction();
+			}
+			
+			if(action != null) {
+				forward = action.execute(request, response);	
+			}			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
 		
 		if(forward != null) {
 			if(forward.isRedirect()) {
